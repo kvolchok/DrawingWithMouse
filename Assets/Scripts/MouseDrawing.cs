@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class LineDrawing : MonoBehaviour
+public class MouseDrawing : MonoBehaviour
 {
     private readonly List<Vector3> _points = new();
     
@@ -19,15 +19,15 @@ public class LineDrawing : MonoBehaviour
     {
         if (Input.GetMouseButton(0))
         {
-            DrawLine();
+            Draw();
         }
         else
         {
-            ResetPreviousLine();   
+            ResetPreviousDrawing();   
         }
     }
 
-    private void DrawLine()
+    private void Draw()
     {
         var mousePosition = Input.mousePosition;
         var ray = _camera.ScreenPointToRay(mousePosition);
@@ -41,7 +41,7 @@ public class LineDrawing : MonoBehaviour
         _lineRenderer.SetPositions(points);
     }
     
-    private void ResetPreviousLine()
+    private void ResetPreviousDrawing()
     {
         _points.Clear();
     }
