@@ -1,10 +1,7 @@
-using System.Collections.Generic;
 using UnityEngine;
 
 public class MouseDrawing : MonoBehaviour
 {
-    private readonly List<Vector3> _points = new();
-    
     [SerializeField]
     private LineRenderer _lineRenderer;
 
@@ -17,32 +14,28 @@ public class MouseDrawing : MonoBehaviour
 
     private void Update()
     {
+        if (Input.GetMouseButtonDown(0))
+        {
+            ResetPreviousDrawing();
+        }
+        
         if (Input.GetMouseButton(0))
         {
             Draw();
-        }
-        else
-        {
-            ResetPreviousDrawing();   
         }
     }
 
     private void Draw()
     {
-        var mousePosition = Input.mousePosition;
-        var ray = _camera.ScreenPointToRay(mousePosition);
+        var mousePosition = new Vector3(Input.mousePosition.x, Input.mousePosition.y, 1);
+        var point = _camera.ScreenToWorldPoint(mousePosition);
 
-        if (!Physics.Raycast(ray, out var hitInfo)) return;
-
-        var point = hitInfo.point;
-        _points.Add(point);
-        var points = _points.ToArray();
-        _lineRenderer.positionCount = points.Length;
-        _lineRenderer.SetPositions(points);
+        var index = ++_lineRenderer.positionCount - 1;
+        _lineRenderer.SetPosition(index, point);
     }
-    
+
     private void ResetPreviousDrawing()
     {
-        _points.Clear();
+        _lineRenderer.positionCount = 0;
     }
 }
